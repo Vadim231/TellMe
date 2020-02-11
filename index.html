@@ -1,0 +1,436 @@
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+
+
+<!DOCTYPE html>
+<html class=''>
+
+<head>
+    <meta charset='UTF-8'>
+
+    <style class="cp-pen-styles">
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+        }
+
+        html,
+        body {
+            background: -webkit-linear-gradient(330deg, #000, #f0a6ca);
+            background: linear-gradient(120deg, #000, #f0a6ca);
+            overflow: hidden;
+        }
+
+        .container {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            height: 106vh;
+            width: 100vw;
+        }
+
+        .container h1 {
+            color: #FFF;
+            text-align: center;
+        }
+
+        .chatbox {
+            background: rgba(255, 255, 255, 0.05);
+            width: 1200px;
+            height: 75%;
+            border-radius: 0.2em;
+            position: relative;
+            box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message {
+            float: right;
+        }
+
+        .chatbox__messages:nth-of-type(odd) .chatbox__messages__user-message--ind-message:after {
+            content: '';
+            position: absolute;
+            margin: -1.5em -17.06em;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message {
+            float: left;
+        }
+
+        .chatbox__messages:nth-of-type(even) .chatbox__messages__user-message--ind-message:after {
+            content: '';
+            position: absolute;
+            margin: -1.5em 1.87em;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chatbox__messages__user-message {
+            width: 450px;
+        }
+
+        .chatbox__messages__user-message--ind-message {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1em 0;
+            height: auto;
+            width: 65%;
+            border-radius: 5px;
+            margin: 2em 1em;
+            overflow: auto;
+        }
+
+        .chatbox__messages__user-message--ind-message>p.name {
+            color: #FFF;
+            font-size: 1em;
+        }
+
+        .chatbox__messages__user-message--ind-message>p.message {
+            color: #FFF;
+            font-size: 0.7em;
+            margin: 0 2.8em;
+        }
+
+        .chatbox__user-list {
+            background: rgba(255, 255, 255, 0.1);
+            width: 25%;
+            height: 100%;
+            float: right;
+            border-top-right-radius: 0.2em;
+            border-bottom-right-radius: 0.2em;
+        }
+
+        .chatbox__user-list h1 {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5em;
+            padding: 1em;
+            margin: 0;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        .chatbox__user,
+        .chatbox__user--active,
+        .chatbox__user--busy,
+        .chatbox__user--away {
+            width: 0.5em;
+            height: 0.5em;
+            font-size: 20px !important;
+            border-radius: 100%;
+            margin: 1em 0.7em;
+        }
+
+        .chatbox__user--active {
+            background: rgba(23, 190, 187, 0.8);
+        }
+
+        .chatbox__user--busy {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .chatbox__user--away {
+            background: rgba(255, 253, 130, 0.8);
+        }
+
+        .chatbox p {
+            float: left;
+            text-align: left;
+            margin: -0.25em 2em;
+            font-size: 0.7em;
+            font-weight: 300;
+            color: #FFF;
+            width: 200px;
+        }
+
+        .chatbox form {
+            background: #222;
+        }
+
+        .chatbox form input {
+            background: rgba(255, 255, 255, 0.03);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border: none;
+            width: 75%;
+            padding: 1.2em;
+            outline: none;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+        #controls{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20%;
+            margin-right:150px;
+            margin-bottom: 15px;
+        }
+
+        ::-webkit-input-placeholder {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        :-moz-placeholder {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        ::-moz-placeholder {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        :-ms-input-placeholder {
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class='container' ng-cloak ng-app="chatApp">
+        <h1>TellMe</h1>
+        <div class='chatbox'>
+            <div class='chatbox__user-list' id="user-list">
+                <h1>Friends</h1>
+            </div>
+            <div class="chatbox__messages" ng-repeat="message in messages">
+                <div class="chatbox__messages__user-message">
+                    <div class="chatbox__messages__user-message--ind-message">
+                        <p class="name">{{message.Name}}</p>
+                        <br />
+                        <p class="message">{{message.Message}}</p>
+                    </div>
+                </div>
+            </div>
+            <form>
+                <input type="text" placeholder="Type Message" style="width: 80%;">
+                <div id="controls">
+                    <button id="recordButton">Record</button>
+                    <button hidden id="pauseButton" disabled>Pause</button>
+                    <button id="stopButton" disabled>Stop</button>
+                    <input type="hidden" type="file" accept="audio/*">
+                </div>
+                <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+
+            </form>
+
+        </div>
+        
+        <ol id="recordingsList"></ol>
+
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- recording -->
+        <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+
+
+
+        <script>
+            console.log(localStorage.getItem('Token'));
+            token = 'Bearer ' + localStorage.getItem('Token');
+            $.ajax({
+                url: "https://cors-anywhere.herokuapp.com/http://jotaro.azurewebsites.net/users/",
+                type: 'GET',
+                headers: {
+                    'Authorization': token,
+                    'X-TokenAuth': localStorage.getItem('Token')
+                },
+                success: function (json) {
+                    console.log(json);
+                    //user = JSON.parse(json);
+                    //users = JSON.stringify(json);
+                    console.log(json);
+
+                    for (i = 0; i < json.length; i++) {
+                        console.log(json[i].name);
+                        document.getElementById('user-list').innerHTML += "<div class='chatbox__user--busy'><p>" + json[i].name + "</p></div>";
+                    }
+                }
+            });
+
+        </script>
+        <script>
+            //webkitURL is deprecated but nevertheless
+            URL = window.URL || window.webkitURL;
+
+            var gumStream; 						//stream from getUserMedia()
+            var rec; 							//Recorder.js object
+            var input; 							//MediaStreamAudioSourceNode we'll be recording
+
+            // shim for AudioContext when it's not avb. 
+            var AudioContext = window.AudioContext || window.webkitAudioContext;
+            var audioContext //audio context to help us record
+
+            var recordButton = document.getElementById("recordButton");
+            var stopButton = document.getElementById("stopButton");
+            var pauseButton = document.getElementById("pauseButton");
+
+            //add events to those 2 buttons
+            recordButton.addEventListener("click", startRecording);
+            stopButton.addEventListener("click", stopRecording);
+            pauseButton.addEventListener("click", pauseRecording);
+
+            function startRecording() {
+                console.log("recordButton clicked");
+
+                /*
+                    Simple constraints object, for more advanced audio features see
+                    https://addpipe.com/blog/audio-constraints-getusermedia/
+                */
+
+                var constraints = { audio: true, video: false }
+
+                /*
+                  Disable the record button until we get a success or fail from getUserMedia() 
+              */
+
+                recordButton.disabled = true;
+                stopButton.disabled = false;
+                pauseButton.disabled = false
+
+                /*
+                    We're using the standard promise based getUserMedia() 
+                    https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
+                */
+
+                navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                    console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+
+                    /*
+                        create an audio context after getUserMedia is called
+                        sampleRate might change after getUserMedia is called, like it does on macOS when recording through AirPods
+                        the sampleRate defaults to the one set in your OS for your playback device
+                    */
+                    audioContext = new AudioContext();
+
+
+                    /*  assign to gumStream for later use  */
+                    gumStream = stream;
+
+                    /* use the stream */
+                    input = audioContext.createMediaStreamSource(stream);
+
+                    /* 
+                        Create the Recorder object and configure to record mono sound (1 channel)
+                        Recording 2 channels  will double the file size
+                    */
+                    rec = new Recorder(input, { numChannels: 1 })
+
+                    //start the recording process
+                    rec.record()
+
+                    console.log("Recording started");
+
+                }).catch(function (err) {
+                    //enable the record button if getUserMedia() fails
+                    recordButton.disabled = false;
+                    stopButton.disabled = true;
+                    pauseButton.disabled = true
+                });
+            }
+
+            function pauseRecording() {
+                console.log("pauseButton clicked rec.recording=", rec.recording);
+                if (rec.recording) {
+                    //pause
+                    rec.stop();
+                    pauseButton.innerHTML = "Resume";
+                } else {
+                    //resume
+                    rec.record()
+                    pauseButton.innerHTML = "Pause";
+
+                }
+            }
+
+            function stopRecording() {
+                console.log("stopButton clicked");
+
+                //disable the stop button, enable the record too allow for new recordings
+                stopButton.disabled = true;
+                recordButton.disabled = false;
+                pauseButton.disabled = true;
+
+                //reset button just in case the recording is stopped while paused
+                pauseButton.innerHTML = "Pause";
+
+                //tell the recorder to stop the recording
+                rec.stop();
+
+                //stop microphone access
+                gumStream.getAudioTracks()[0].stop();
+
+                //create the wav blob and pass it on to createDownloadLink
+                rec.exportWAV(createDownloadLink);
+            }
+
+            function createDownloadLink(blob) {
+
+                var url = URL.createObjectURL(blob);
+                var li = document.createElement('li');
+                var link = document.createElement('a');
+
+                //name of .wav file to use during upload and download (without extendion)
+                var filename = new Date().toISOString();
+
+                $.ajax({
+                    url: 'https://cors-anywhere.herokuapp.com/https://speech-recognition.azurewebsites.net/api/audio/',
+                    type: 'POST',
+                    data: {'upload':filename + ".wav"},
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+
+
+                //save to disk link
+                link.href = url;
+                link.download = filename + ".wav"; //download forces the browser to download the file using the filename
+                link.innerHTML = "Save to disk";
+
+
+                //add the filename to the li
+                li.appendChild(document.createTextNode(filename + ".wav "))
+
+                //add the save to disk link to li
+                li.appendChild(link);
+
+                //add the li element to the ol
+                recordingsList.appendChild(li);
+            }
+        </script>
+
+
+
+
+
+</body>
+
+</html>
